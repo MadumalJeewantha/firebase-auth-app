@@ -1,0 +1,10 @@
+{
+  "hosting": {
+    "public": "./Auth App",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
