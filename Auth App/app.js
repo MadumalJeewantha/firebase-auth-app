@@ -72,6 +72,7 @@ authAction.forEach(eachItem => {
 // Invoked at the start of auth functions in order to hide everything before selectively showing the correct form
 hideAuthElements = () => {
     clearMessage();
+    loading('hide');
     createUserForm.classList.add('hide');
     signInForm.classList.add('hide');
     forgotPasswordForm.classList.add('hide');
@@ -146,6 +147,7 @@ auth.onAuthStateChanged(user => {
 // Create a user
 createUserForm.addEventListener('submit', event => {
     event.preventDefault();
+    loading('show');
 
     // Get values
     const displayName = document.getElementById('create-user-display-name').value;
@@ -165,6 +167,7 @@ createUserForm.addEventListener('submit', event => {
         .catch(error => {
             console.log(error.message);
             displayMessage('error', error.message);
+            loading('hide');
         });
 });
 
@@ -177,6 +180,7 @@ signOut = () => {
 // Sign in form submit event
 signInForm.addEventListener('submit', event => {
     event.preventDefault();
+    loading('show');
 
     // Get values
     const email = document.getElementById('sign-in-email').value;
@@ -190,12 +194,14 @@ signInForm.addEventListener('submit', event => {
         .catch(error => {
             console.log(error.message);
             displayMessage('error', error.message);
+            loading('hide');
         });
 });
 
 // Forgot password form submit event
 forgotPasswordForm.addEventListener('submit', event => {
     event.preventDefault();
+    loading('show');
 
     // Get values
     var emailAddress = document.getElementById('forgot-password-email').value;
@@ -208,6 +214,7 @@ forgotPasswordForm.addEventListener('submit', event => {
         .catch(error => {
             console.log(error.message);
             displayMessage('error', error.message);
+            loading('hide');
         });
 });
 
@@ -239,4 +246,15 @@ clearMessage = () => {
     clearTimeout(messageTimeout);
     authMessage.innerHTML = '';
     authMessage.style.display = 'none';
+}
+
+// Function to hide and show the loading visual cue
+loading = (action) => {
+    if (action == 'show') {
+        document.getElementById('loading-outer-container').style.display = 'block';
+    } else if (action === 'hide') {
+        document.getElementById('loading-outer-container').style.display = 'none';
+    } else {
+        console.log('loading error');
+    }
 }
