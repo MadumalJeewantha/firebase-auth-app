@@ -71,6 +71,7 @@ authAction.forEach(eachItem => {
 
 // Invoked at the start of auth functions in order to hide everything before selectively showing the correct form
 hideAuthElements = () => {
+    clearMessage();
     createUserForm.classList.add('hide');
     signInForm.classList.add('hide');
     forgotPasswordForm.classList.add('hide');
@@ -163,6 +164,7 @@ createUserForm.addEventListener('submit', event => {
         })
         .catch(error => {
             console.log(error.message);
+            displayMessage('error', error.message);
         });
 });
 
@@ -187,6 +189,7 @@ signInForm.addEventListener('submit', event => {
         })
         .catch(error => {
             console.log(error.message);
+            displayMessage('error', error.message);
         });
 });
 
@@ -200,8 +203,40 @@ forgotPasswordForm.addEventListener('submit', event => {
         .then(() => {
             forgotPasswordForm.reset();
             console.log("Reset link has been sent. Please check your email.")
+            displayMessage('success', "Reset link has been sent. Please check your email.");
         })
         .catch(error => {
             console.log(error.message);
+            displayMessage('error', error.message);
         });
 });
+
+// Access the message HTML element
+const authMessage = document.getElementById('message');
+
+// Makes the messageTimeout global so that the clearTimeout method will work when invoked
+let messageTimeout;
+
+// Error and message handling
+displayMessage = (type, message) => {
+    if (type == 'error') {
+        authMessage.style.borderColor = 'red'
+        authMessage.style.color = 'red'
+        authMessage.style.display = 'block'
+    } else if (type === 'success') {
+        authMessage.style.borderColor = 'green'
+        authMessage.style.color = 'green'
+        authMessage.style.display = 'block'
+    }
+    authMessage.innerHTML = message;
+    messageTimeout = setTimeout(() => {
+        authMessage.innerHTML = '';
+        authMessage.style.display = 'none';
+    }, 7000);
+}
+
+clearMessage = () => {
+    clearTimeout(messageTimeout);
+    authMessage.innerHTML = '';
+    authMessage.style.display = 'none';
+}
