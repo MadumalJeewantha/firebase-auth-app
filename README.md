@@ -1,0 +1,1 @@
+Firebase application with authentication enabled
